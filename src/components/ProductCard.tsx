@@ -35,7 +35,11 @@ export default function ProductCard({ id, name, price }: Product) {
       </div>
       <h2 className='text-slate-400'>{name}</h2>
       <h2 className='font-semibold text-green-400'>$ {formatPrice(price)}</h2>
-      <select className='w-[30%] text-right' onChange={handleChange}>
+      <select
+        className='w-[30%] text-right'
+        value={quantity}
+        onChange={handleChange}
+      >
         {[...new Array(5)].map((_, index) => (
           <option key={index}>{index + 1}</option>
         ))}

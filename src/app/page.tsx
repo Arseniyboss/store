@@ -5,7 +5,7 @@ import { getTotalPrice } from '@/utils/getTotalPrice'
 import { getCartItems } from '@/utils/cart'
 import { products } from '@/data/products'
 
-export default async function AddToCart() {
+export default async function Page() {
   const cartItems = await getCartItems()
   const totalPrice = getTotalPrice(cartItems)
   return (

@@ -25,11 +25,14 @@ export default function CartItem({ id, name, quantity, price }: Props) {
       <div className='w-[40%] flex gap-2 items-center'>
         <span>{name}</span>
       </div>
-      <div className='w-[30%] text-center'>{quantity}</div>
       <div className='w-[30%] text-center'>
         ${formatPrice(quantity * price)}
       </div>
-      <select className='w-[30%] text-right' onChange={handleUpdate}>
+      <select
+        className='w-[30%] text-right'
+        value={quantity}
+        onChange={handleUpdate}
+      >
         {[...new Array(5)].map((_, index) => (
           <option key={index}>{index + 1}</option>
         ))}
