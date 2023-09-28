@@ -2,16 +2,13 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { formatNumber } from '@/utils/formatNumber'
+import { formatPrice } from '@/utils/formatPrice'
 import { addItem } from '@/actions/addItem'
+import { Product } from '@/types'
 
-type ProductCartProps = {
-  id: number
-  name: string
-  price: number
-}
-
-export default function ProductCard({ id, name, price }: ProductCartProps) {
+export default function ProductCard({ id, name, price }: Product) {
+  const quantity = 1
+  const cartItem = { id, name, price, quantity }
   const router = useRouter()
   return (
     <div className='border p-3 rounded-xl border-slate-700'>
@@ -25,12 +22,11 @@ export default function ProductCard({ id, name, price }: ProductCartProps) {
         />
       </div>
       <h2 className='text-slate-400'>{name}</h2>
-      <h2 className='font-semibold text-green-400'>$ {formatNumber(price)}</h2>
+      <h2 className='font-semibold text-green-400'>$ {formatPrice(price)}</h2>
       <button
         className='mt-4 font-semibold text-sm bg-slate-100 text-slate-800 rounded-md px-2 py-1 text-center w-full'
-        // onClick={() => addItem(id)}
         onClick={() => {
-          addItem(id)
+          addItem(cartItem)
           router.refresh()
         }}
       >

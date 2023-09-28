@@ -1,56 +1,22 @@
 'use server'
 
 import { kv } from '@vercel/kv'
-// import { revalidatePath } from 'next/cache'
-import { products, type Product } from '@/app/page'
+import { CartItem } from '@/types'
 
-type CartItem = {
-  id: number
-  name: string
-  price: number
-  quantity: number
-}
+// return throwError({ error: 'Item is already in the cart', status: 400 })
 
-export type Cart = {
-  items: CartItem[]
-}
+export async function addItem(cartItem: CartItem) {
+  const cartItems: CartItem[] = (await kv.get('cartItems')) || []
 
-export async function addItem(id: number) {
-  let cart: Cart | null = await kv.get('cart')
+  const index = cartItems.findIndex(({ id }) => cartItem.id === id)
 
-  const selectedProduct: Product = products.filter(
-    (product) => product.id === id
-  )[0]
-  let myCart = {} as Cart
-
-  if (!cart || !cart?.items) {
-    myCart = {
-      items: [
-        {
-          ...selectedProduct,
-          quantity: 1,
-        },
-      ],
-    }
-  } else {
-    let itemNotFound = true
-
-    myCart.items = cart.items.map((item) => {
-      if (item.id === id) {
-        itemNotFound = false
-        item.quantity += 1
-      }
-      return item
-    }) as Cart['items']
-
-    if (itemNotFound) {
-      myCart.items.push({
-        ...selectedProduct,
-        quantity: 1,
-      })
-    }
+  if (index !== -1) {
+    cartItems[index].quantity += 1
+    await kv.set('cartItems', cartItems)
+    return
   }
 
-  await kv.set('cart', myCart)
-  // revalidatePath('/add-to-cart')
+  cartItems.push(cartItem)
+
+  await kv.set('cartItems', cartItems)
 }

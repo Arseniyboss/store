@@ -1,14 +1,10 @@
 import ProductCard from '@/components/ProductCard'
 import CartItem from '@/components/CartItem'
-import { type Cart } from '@/actions/addItem'
+import { type CartItem as CartItemType } from '@/types'
 import { kv } from '@vercel/kv'
 import ClearCart from '@/components/ClearCart'
-
-export type Product = {
-  id: number
-  name: string
-  price: number
-}
+import { Product } from '@/types'
+import { formatPrice } from '@/utils/formatPrice'
 
 export const products: Product[] = [
   {
@@ -28,11 +24,16 @@ export const products: Product[] = [
   },
 ]
 
+export const getTotalPrice = (cartItems: CartItemType[]) => {
+  const totalPrice = cartItems.reduce((acc, item) => {
+    return acc + item.quantity * item.price
+  }, 0)
+  return formatPrice(totalPrice)
+}
+
 export default async function AddToCart() {
-  const cart: Cart | null = await kv.get('cart')
-  const total = cart?.items
-    .map((item) => item.quantity * item.price)
-    .reduce((sum, current) => (sum = sum + current))
+  const cartItems: CartItemType[] = (await kv.get('cartItems')) || []
+  const totalPrice = getTotalPrice(cartItems)
   return (
     <main className='flex min-h-screen flex-col items-center p-24 bg-slate-950'>
       <div className='w-full'>
@@ -48,23 +49,19 @@ export default async function AddToCart() {
       <div className='mt-6 w-full'>
         <h1 className='font-semibold text-xl text-white'>Cart: </h1>
         <div className='mt-2 border px-6 py-4 rounded-xl border-slate-700 flex flex-col gap-2'>
-          {cart?.items ? (
-            cart.items.map((item, index) => (
-              <CartItem
-                key={item.id}
-                no={index + 1}
-                name={item.name}
-                price={item.price}
-                quantity={item.quantity}
-              />
-            ))
+          {cartItems.length === 0 ? (
+            <p>Your cart is empty</p>
           ) : (
-            <span className='text-sm text-slate-600'>No Item</span>
+            <div>
+              {cartItems.map((cartItem) => (
+                <CartItem key={cartItem.id} {...cartItem} />
+              ))}
+            </div>
           )}
         </div>
         <div className='flex justify-between px-6 mt-4 font-semibold text-white'>
           <div>Total</div>
-          <div>{total}</div>
+          <div>{totalPrice}</div>
         </div>
         <ClearCart />
       </div>
