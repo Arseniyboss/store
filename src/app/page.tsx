@@ -1,38 +1,12 @@
 import ProductCard from '@/components/ProductCard'
 import CartItem from '@/components/CartItem'
-import { type CartItem as CartItemType } from '@/types'
-import { kv } from '@vercel/kv'
 import ClearCart from '@/components/ClearCart'
-import { Product } from '@/types'
-import { formatPrice } from '@/utils/formatPrice'
-
-export const products: Product[] = [
-  {
-    id: 1,
-    name: 'Americano',
-    price: 40,
-  },
-  {
-    id: 2,
-    name: 'Expresso',
-    price: 20,
-  },
-  {
-    id: 3,
-    name: 'Arabica',
-    price: 10,
-  },
-]
-
-export const getTotalPrice = (cartItems: CartItemType[]) => {
-  const totalPrice = cartItems.reduce((acc, item) => {
-    return acc + item.quantity * item.price
-  }, 0)
-  return formatPrice(totalPrice)
-}
+import { getTotalPrice } from '@/utils/getTotalPrice'
+import { getCartItems } from '@/utils/cart'
+import { products } from '@/data/products'
 
 export default async function AddToCart() {
-  const cartItems: CartItemType[] = (await kv.get('cartItems')) || []
+  const cartItems = await getCartItems()
   const totalPrice = getTotalPrice(cartItems)
   return (
     <main className='flex min-h-screen flex-col items-center p-24 bg-slate-950'>
