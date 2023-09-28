@@ -1,5 +1,5 @@
 import { CartItem } from '@/types'
-import { getCartItems, setCartItems } from '@/utils/cart'
+import { getCartItems, setCartItems } from '@/utils/cartItems'
 
 export async function addCartItem(cartItem: CartItem) {
   const cartItems: CartItem[] = await getCartItems()

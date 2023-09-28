@@ -2,7 +2,7 @@ import ProductCard from '@/components/ProductCard'
 import CartItem from '@/components/CartItem'
 import ClearCart from '@/components/ClearCart'
 import { getTotalPrice } from '@/utils/getTotalPrice'
-import { getCartItems } from '@/utils/cart'
+import { getCartItems } from '@/utils/cartItems'
 import { products } from '@/data/products'
 
 export default async function Page() {

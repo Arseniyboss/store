@@ -3,17 +3,17 @@ import { Product } from '@/types'
 export const products: Product[] = [
   {
     id: 1,
-    name: 'Americano',
-    price: 40,
+    name: 'Airpods',
+    price: 399.99,
   },
   {
     id: 2,
-    name: 'Expresso',
-    price: 20,
+    name: 'Airpods',
+    price: 399.99,
   },
   {
     id: 3,
-    name: 'Arabica',
-    price: 10,
+    name: 'Airpods',
+    price: 399.99,
   },
 ]

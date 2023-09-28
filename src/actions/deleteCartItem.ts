@@ -1,4 +1,4 @@
-import { getCartItems, setCartItems } from '@/utils/cart'
+import { getCartItems, setCartItems } from '@/utils/cartItems'
 
 export const deleteCartItem = async (id: number) => {
   const cartItems = await getCartItems()

@@ -1,13 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { clearCart } from '@/utils/cart'
+import { clearCart } from '@/utils/cartItems'
 
 const ClearCart = () => {
   const router = useRouter()
 
-  const handleClick = () => {
-    clearCart()
+  const handleClick = async () => {
+    await clearCart()
     router.refresh()
   }
   return (
